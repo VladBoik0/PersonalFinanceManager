@@ -5,6 +5,8 @@ import com.pfm.demo.model.Transaction;
 import com.pfm.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -32,15 +34,15 @@ public class CategoryController {
         return categoryService.createCategory(category);
     }
 
-
-    @DeleteMapping("/delete/{id}")
-    public void deleteCategoryById(@PathVariable("id") Long id) {
-        categoryService.deleteCategoryById(id);
-    }
-
     @GetMapping("/search/{name}")
     public List<Category> getCategoriesByName(@PathVariable String name) {
         return categoryService.getCategoriesByName(name);
+    }
+
+    @DeleteMapping("/delete/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategoryAndRelatedTransactions(categoryId);
+        return ResponseEntity.ok().build();
     }
 }
 

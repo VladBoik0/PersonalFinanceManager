@@ -2,6 +2,8 @@ package com.pfm.demo.service;
 
 import com.pfm.demo.model.Category;
 import com.pfm.demo.repository.CategoryRepository;
+import com.pfm.demo.repository.TransactionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,12 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService{
 
     private final CategoryRepository categoryRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, TransactionRepository transactionRepository) {
         this.categoryRepository = categoryRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -37,14 +41,17 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.save(category);
     }
 
-    @Override
-    public void deleteCategoryById(Long id) {
-        categoryRepository.deleteById(id);
-    }
 
     @Override
     public List<Category> getCategoriesByName(String name) {
         return categoryRepository.findByName(name);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategoryAndRelatedTransactions(Long categoryId) {
+        transactionRepository.deleteByCategoryId(categoryId);
+        categoryRepository.deleteById(categoryId);
     }
 
 }
