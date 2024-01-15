@@ -39,9 +39,9 @@ public class CategoryController {
         return categoryService.getCategoriesByName(name);
     }
 
-    @DeleteMapping("/delete/{categoryId}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
-        categoryService.deleteCategoryAndRelatedTransactions(categoryId);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
 }

@@ -48,10 +48,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    @Transactional
-    public void deleteCategoryAndRelatedTransactions(Long categoryId) {
-        transactionRepository.deleteByCategoryId(categoryId);
-        categoryRepository.deleteById(categoryId);
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
-
 }
